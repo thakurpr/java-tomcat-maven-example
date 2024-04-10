@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    environment {
+        SONAR_SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your source code from version control
+                git 'https://github.com/thakurpr/java-tomcat-maven-example'
+            }
+        }
+        stage('Build') {
+            steps {
+                // Build your project with Maven
+                sh 'mvn clean package'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                // Run SonarQube analysis
+                withSonarQubeEnv('SonarQube Server') {
+                    sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner"
+                }
+            }
+        }
+        stage('Deploy to EC2') {
+            steps {
+                // Copy artifacts to EC2 instance
+                sh "scp -i /Users/thakur/Desktop/AWSkey/aws-key.pem /path/to/your/artifact.jar ubuntu@ec2-54-163-166-224.compute-1.amazonaws.com:/home/ubuntu"
+                // SSH into EC2 instance and deploy
+                sh "ssh -i /path/to/your/private/key ec2-user@ec2-instance-ip 'sudo systemctl stop your-service; cp /user/share/maven/artifact.jar /path/to/destination; sudo systemctl start your-service'"
+            }
+        }
+    }
+}
+
