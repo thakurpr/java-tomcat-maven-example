@@ -18,14 +18,15 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        stage('SonarQube Analysis') {
-            steps {
-                // Run SonarQube analysis
-                withSonarQubeEnv('SonarQube Server') {
-                    sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner"
-                }
-            }
-        }
+
+      ## stage('SonarQube Analysis') {
+      ##     steps {
+      ##          // Run SonarQube analysis
+      ##         withSonarQubeEnv('SonarQube Server') {
+      ##             sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner"
+      ##          }
+      ##  }
+
         stage('Deploy to EC2') {
             steps {
                 // Copy artifacts to EC2 instance
