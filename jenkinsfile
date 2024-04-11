@@ -8,7 +8,14 @@ pipeline {
     }
 
     stages {
-        stage('Deploy to EC2') {
+         stage('Debug SSH Agent') {
+            steps {
+                script {
+                    sshagent(credentials: ['your-ssh-credentials-id']) {
+                        sh 'echo "SSH Agent is active"'
+                        sh 'ssh-add -l'
+
+         stage('Deploy to EC2') {
             steps {
                 script {
                     // SSH into EC2 instance
