@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'srinidhi-maven-project:v1'
         EC2_INSTANCE = 'ubuntu@ec2-54-209-40-123.compute-1.amazonaws.com'
-        SSH_PRIVATE_KEY = credentials('my-ssh-key')
+        SSH_PRIVATE_KEY = ('my-ssh-key')
     }
 
     stages {
