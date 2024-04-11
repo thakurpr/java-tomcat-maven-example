@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'srinidhi-maven-project:v1'
-        EC2_INSTANCE = 'ubuntu@ec2-54-209-40-123'
+        EC2_INSTANCE = 'ubuntu@ec2-54-209-40-123.compute-1.amazonaws.com'
         SSH_CREDENTIALS_ID = credentials('c47be239-4c01-41c3-b443-c842d1c3c916')
     }
 
