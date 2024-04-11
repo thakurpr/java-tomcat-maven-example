@@ -7,7 +7,7 @@ WORKDIR /app
 
 
 # Copy the JAR or WAR file into the container
-COPY webapp-runner.jar /app/
+COPY target/dependency/webapp-runner.jar /app/
 # Or use COPY myapp.war /app/ if your application is a WAR file
 
 
