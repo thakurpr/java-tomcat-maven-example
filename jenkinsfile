@@ -19,6 +19,7 @@ pipeline {
                 }
             }
         }
+}
 
     stages {
          stage('Deploy to EC2') {
