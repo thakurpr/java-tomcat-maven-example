@@ -30,9 +30,9 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 // Copy artifacts to EC2 instance
-                sh "scp -i /Users/thakur/Desktop/AWSkey/aws-key.pem /target/webapp-runner.jar ubuntu@ec2-54-163-166-224.compute-1.amazonaws.com:/home/ubuntu"
+                sh "scp -i /Users/thakur/Desktop/KeyPair/jenkins-demo.pem /target/webapp-runner.jar ubuntu@ip-172-31-84-190:/home/ubuntu"
                 // SSH into EC2 instance and deploy
-                sh "ssh -i /Users/thakur/Desktop/AWSkey/aws-key.pem ec2-user@ec2-instance-ip 'sudo systemctl stop your-service; cp /target/webapp-runner.jar ubuntu@ec2-54-163-166-224.compute-1.amazonaws.com:/home/ubuntu; sudo systemctl start your-service'"
+                sh "ssh -i /Users/thakur/Desktop/KeyPair/jenkins-demo.pem ubuntu@ip-172-31-84-190 'sudo systemctl stop your-service; cp /target/webapp-runner.jar ubuntu@ip-172-31-84-190:/home/ubuntu; sudo systemctl start your-service'"
             }
         }
     }
