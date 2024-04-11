@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'srinidhi-maven-project:v1'
         EC2_INSTANCE = 'ubuntu@ec2-54-209-40-123'
-        SSH_PRIVATE_KEY = credentials('c47be239-4c01-41c3-b443-c842d1c3c916')
+        SSH_USERNAME_WITH_PRIVATE_KEY = credentials('c47be239-4c01-41c3-b443-c842d1c3c916')
     }
 
     stages {
@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     // SSH into EC2 instance
-                    sshagent(['SSH_PRIVATE_KEY']) {
+                    sshagent(['SSH_USERNAME_WITH_PRIVATE_KEY']) {
                         // Pull Docker image from Docker Hub
                         sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker pull ${DOCKER_IMAGE}'"
 
