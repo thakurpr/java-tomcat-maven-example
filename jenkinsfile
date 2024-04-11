@@ -19,14 +19,12 @@ pipeline {
                 }
             }
         }
-}
 
-    stages {
-         stage('Deploy to EC2') {
+        stage('Deploy to EC2') {
             steps {
                 script {
-                    // SSH into EC2 instance
-                    sshagent(credentials[SSH_PRIVATE_KEY]) {
+                    // SSH into EC2 instance using sshagent
+                    sshagent(credentials: ['SSH_PRIVATE_KEY']) {
                         // Pull Docker image from Docker Hub
                         sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker pull ${DOCKER_IMAGE}'"
 
