@@ -1,29 +1,20 @@
-# Stage 1: Build the application using Maven
-FROM maven:3.8.4-openjdk-17-slim AS builder
+# Use an official OpenJDK runtime as the base image
+FROM openjdk:11
 
-# Set the working directory in the container
-WORKDIR /build
 
-# Copy the Maven project files (pom.xml) to the working directory
-COPY pom.xml .
-
-# Copy the entire source code
-COPY src ./src
-
-# Build the application
-RUN mvn clean package -DskipTests
-
-# Stage 2: Create the final image with the built application
-FROM openjdk:17-slim
-
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the compiled application JAR from the builder stage to the working directory
-COPY --from=builder /build/target/my-app.jar ./app.jar
 
-# Expose port 8080 to allow external access to the application
+# Copy the JAR or WAR file into the container
+COPY webapp-runner.jar /app/
+# Or use COPY myapp.war /app/ if your application is a WAR file
+
+
+# Expose the port that the application listens on (replace 8080 with your application's port)
 EXPOSE 8080
 
-# Command to run the application when the container starts
-CMD ["java", "-jar", "app.jar"]
+
+# Command to run when the container starts
+CMD ["java", "-jar", "webapp-runner.jar"]
+# Or CMD ["java", "-jar", "myapp.war"] if your application is a WAR file
