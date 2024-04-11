@@ -4,15 +4,23 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'srinidhi-maven-project:v1'
         EC2_INSTANCE = 'ubuntu@ec2-54-209-40-123.compute-1.amazonaws.com'
-        SSH_CREDENTIALS_ID = credentials('c47be239-4c01-41c3-b443-c842d1c3c916')
+        SSH_CREDENTIALS_ID = 'c47be239-4c01-41c3-b443-c842d1c3c916'
     }
+
+  stages {
+        stage('Debug SSH Agent') {
+            steps {
+                script {
+                    sshagent(credentials: ['your-ssh-credentials-id']) {
+                        sh 'echo "SSH Agent is active"'
+                        sh 'ssh-add -l'
 
     stages {
         stage('Deploy to EC2') {
             steps {
                 script {
                     // SSH into EC2 instance
-                    sshagent([SSH_CREDENTIALS_ID]) {
+                    sshagent(credentials:[SSH_CREDENTIALS_ID]) {
                         // Pull Docker image from Docker Hub
                         sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker pull ${DOCKER_IMAGE}'"
 
