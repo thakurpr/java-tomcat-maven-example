@@ -7,14 +7,6 @@ pipeline {
         SSH_CREDENTIALS_ID = 'c47be239-4c01-41c3-b443-c842d1c3c916'
     }
 
-  stages {
-        stage('Debug SSH Agent') {
-            steps {
-                script {
-                    sshagent(credentials: ['your-ssh-credentials-id']) {
-                        sh 'echo "SSH Agent is active"'
-                        sh 'ssh-add -l'
-
     stages {
         stage('Deploy to EC2') {
             steps {
