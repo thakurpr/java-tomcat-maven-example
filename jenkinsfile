@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'srinidhi-maven-project:v1'
         EC2_INSTANCE = 'ubuntu@ec2-54-209-40-123.compute-1.amazonaws.com'
-        SSH_PRIVATE_KEY = credentials('my-ssh-key')
     }
 
     stages {
@@ -12,9 +11,10 @@ pipeline {
             steps {
                 script {
                     // Use withCredentials block to safely handle SSH private key
-                    withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'my-ssh-key_FILE')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'SSH_PRIVATE_KEY_FILE')]) {
                         // Print SSH private key file path for debugging (not the key itself)
-                        echo "SSH Private Key File: ${my-ssh-key_FILE}"
+                        echo "SSH Private Key File: ${SSH_PRIVATE_KEY_FILE}"
+                    }
                 }
             }
         }
@@ -23,15 +23,9 @@ pipeline {
             steps {
                 script {
                     // SSH into EC2 instance using sshagent
-                    sshagent(credentials: ['SSH_PRIVATE_KEY']) {
+                    sshagent(credentials: ['my-ssh-key']) {
                         // Pull Docker image from Docker Hub
                         sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker pull ${DOCKER_IMAGE}'"
 
                         // Run Docker container on EC2 instance
-                        sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker run -d -p 8080:8080 ${DOCKER_IMAGE}'"
-                    }
-                }
-            }
-        }
-    }
-}
+                        sh "ssh -o StrictHostKeyChecking=no ${EC
