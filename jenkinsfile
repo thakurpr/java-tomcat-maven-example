@@ -1,27 +1,24 @@
 pipeline {
     agent any
-
+    
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout your source code from version control
-                git 'https://github.com/thakurpr/java-tomcat-maven-example'
-            }
-        }
         stage('Build') {
             steps {
-                // Build your project with Maven
+                // Checkout source code from version control
+                git 'https://github.com/thakurpr/java-tomcat-maven-example'
+                
+                // Build Maven project
                 sh 'mvn clean package'
             }
         }
-        stage('Deploy to EC2') {
+        
+        stage('Deploy') {
             steps {
-                // Copy artifacts to EC2 instance
-                sh "scp -i /Users/thakur/Desktop/KeyPair/jenkins-demo.pem /target/webapp-runner.jar ubuntu@ip-172-31-84-190:/home/ubuntu"
-                // SSH into EC2 instance and deploy
-                sh "ssh -i /Users/thakur/Desktop/KeyPair/jenkins-demo.pem ubuntu@ip-172-31-84-190 'sudo systemctl stop your-service; cp /target/webapp-runner.jar ubuntu@ip-172-31-84-190:/home/ubuntu; sudo systemctl start your-service'"
+                // Deploy Maven artifact (e.g., JAR file)
+                // You can deploy to a local directory, a remote server, or a cloud platform
+                // For example, deploy to a local directory
+                sh 'cp target/webapp-runner.jar /Users/thakur/desktop/deploy'
             }
         }
     }
 }
-
