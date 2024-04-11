@@ -11,11 +11,10 @@ pipeline {
         stage('Debug SSH Key') {
             steps {
                 script {
-                    // Print SSH private key for debugging
-                    echo "SSH Private Key: ${SSH_PRIVATE_KEY}"
-
-                    // Print EC2 instance details for debugging
-                    echo "EC2 Instance: ${EC2_INSTANCE}"
+                    // Use withCredentials block to safely handle SSH private key
+                    withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'my-ssh-key_FILE')]) {
+                        // Print SSH private key file path for debugging (not the key itself)
+                        echo "SSH Private Key File: ${my-ssh-key_FILE}"
                 }
             }
         }
