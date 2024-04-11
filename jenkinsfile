@@ -1,23 +1,25 @@
 pipeline {
     agent any
-    
+
+    environment {
+        DOCKER_IMAGE = 'srinidhi-maven-project:v1'
+        EC2_INSTANCE = 'ubuntu@ec2-54-209-40-123'
+        SSH_PRIVATE_KEY = credentials('c47be239-4c01-41c3-b443-c842d1c3c916')
+    }
+
     stages {
-        stage('Build') {
+        stage('Deploy to EC2') {
             steps {
-                // Checkout source code from version control
-                git 'https://github.com/thakurpr/java-tomcat-maven-example'
-                
-                // Build Maven project
-                sh 'mvn clean package'
-            }
-        }
-        
-        stage('Deploy') {
-            steps {
-                // Deploy Maven artifact (e.g., JAR file)
-                // You can deploy to a local directory, a remote server, or a cloud platform
-                // For example, deploy to a local directory
-                sh 'cp /Users/thakur/.jenkins/workspace/maven-project-test/target/dependency/webapp-runner.jar /Users/thakur/desktop/deploy'
+                script {
+                    // SSH into EC2 instance
+                    sshagent(['SSH_PRIVATE_KEY']) {
+                        // Pull Docker image from Docker Hub
+                        sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker pull ${DOCKER_IMAGE}'"
+
+                        // Run Docker container on EC2 instance
+                        sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker run -d -p 8080:8080 ${DOCKER_IMAGE}'"
+                    }
+                }
             }
         }
     }
