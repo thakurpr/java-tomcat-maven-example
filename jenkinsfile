@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // SSH into EC2 instance
-                    sshagent(['SSH_Username_with_private_key']) {
+                    sshagent(['SSH_CREDENTIALS_ID']) {
                         // Pull Docker image from Docker Hub
                         sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker pull ${DOCKER_IMAGE}'"
 
