@@ -17,7 +17,7 @@ pipeline {
                 // Deploy Maven artifact (e.g., JAR file)
                 // You can deploy to a local directory, a remote server, or a cloud platform
                 // For example, deploy to a local directory
-                sh 'cp target/webapp-runner.jar /Users/thakur/desktop/deploy'
+                sh 'cp /Users/thakur/.jenkins/workspace/maven-project-test/target/dependency/webapp-runner.jar /Users/thakur/desktop/deploy'
             }
         }
     }
