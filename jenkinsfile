@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'srinidhi-maven-project:v1'
         EC2_INSTANCE = 'ubuntu@ec2-54-209-40-123.compute-1.amazonaws.com'
+        SSH_PRIVATE_KEY = credentials('my-ssh-key')
     }
 
     stages {
@@ -28,4 +29,10 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker pull ${DOCKER_IMAGE}'"
 
                         // Run Docker container on EC2 instance
-                        sh "ssh -o StrictHostKeyChecking=no ${EC
+                        sh "ssh -o StrictHostKeyChecking=no ${EC2_INSTANCE} 'docker run -d -p 8080:8080 ${DOCKER_IMAGE}'"
+                    }
+                }
+            }
+        }
+    }
+}
